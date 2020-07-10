@@ -5,9 +5,8 @@
  *      Author: Meriam
  */
 
-
-#include "LCD.h"
 #define F_CPU 16000000
+#include "LCD.h"
 #include <util/delay.h>
 
 void LCD_initial (void)
@@ -60,7 +59,7 @@ void LCD_initial (void)
 	LCD_WriteCmd(0x32);
 	LCD_WriteCmd(0x28);
 
-	LCD_WriteCmd(0x0E);  //Displayon,Cursor off
+	LCD_WriteCmd(0x0C);  //Displayon,Cursor off
 	LCD_WriteCmd(0x01); // clear screen
 
 	LCD_WriteCmd(0x06); // increment cursor
@@ -182,7 +181,7 @@ void LCD_WriteInteger (Sint32 integer){
 
 	Sint32 val = integer ;
 
-	while (val != 0 ){
+	while (val ){
 
 		val = val /10 ;
 		digit_pos = digit_pos * 10 ;
@@ -193,13 +192,22 @@ void LCD_WriteInteger (Sint32 integer){
 		digit_pos = digit_pos /10 ;
 
 		TheDigit = integer / digit_pos ;
-if (val < 0 )
+
+if (integer < 0 ){
 		LCD_WriteChar(45);
+		TheDigit = -TheDigit ;
 		LCD_WriteChar(TheDigit + 48);
 		integer = integer % digit_pos ;
+}
 
+else {
 
-	}
+	LCD_WriteChar(TheDigit + 48);
+	integer = integer % digit_pos ;
+
+}
+
+}
 
 
 
